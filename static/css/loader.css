@@ -1,0 +1,18 @@
+#wrap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+#wrap canvas {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 250;
+    height: 250;
+    margin: -250px 0 0 -250px;
+    -outline: 1px solid #fff;
+}

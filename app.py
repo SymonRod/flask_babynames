@@ -8,6 +8,7 @@ from flask import request
 
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = 'users'
 
@@ -17,11 +18,13 @@ class User(Base):
     nickname = Column(String)
 
     def __repr__(self):
-        return "<User(name='%s', fullname='%s', nickname='%s')>" % ( self.name, self.fullname, self.nickname)
+        return "<User(name='%s', fullname='%s', nickname='%s')>" % (self.name, self.fullname, self.nickname)
 
-app = Flask(__name__)
 
-engine = create_engine('sqlite:///database/db.sqlite', echo=True,connect_args={'check_same_thread': False})
+app = Flask(__name__, static_url_path='',)
+
+engine = create_engine('sqlite:///database/db.sqlite',
+                       echo=True, connect_args={'check_same_thread': False})
 
 Session = sessionmaker()
 Session.configure(bind=engine)
@@ -34,13 +37,12 @@ def newUtente():
 
 # @app.route("/")
 # def home():
-	
+
 # 	users = []
 
 # 	for instance in session.query(User).order_by(User.id):
 # 		users.append(instance)
 # 		print(instance.name)
-	
 
 
 # 	data = {'users':users}
@@ -48,13 +50,13 @@ def newUtente():
 
 @app.route("/<name>")
 def user(name):
-	return f"Hello {name}!"
+    return f"Hello {name}!"
+
 
 @app.route("/")
 def index():
-    render_template("index.html")
-
+    return render_template("index.html")
 
 
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)
