@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "name": "Python: File corrente",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal"
+    }
+  ]
+}
