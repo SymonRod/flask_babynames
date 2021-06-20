@@ -52,7 +52,7 @@ def user(name):
 
 @app.route("/")
 def index():
-    return "Hello index!"
+    render_template("index.html")
 
 
 
