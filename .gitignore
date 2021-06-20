@@ -1,2 +1,3 @@
 .vscode/*
 database/*
+app_secret.py

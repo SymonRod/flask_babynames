@@ -1,7 +1,23 @@
 <nav>
-    <div class="nav-wrapper">
-        <a href="#" class="brand-logo center">Baby Names</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <div class="container">
+        <a href="#" class="brand-logo">Baby Names</a>
+
+        <ul class="right hide-on-med-and-down">
+            {% if session['logged'] %}
+            <li>
+                {{ "Bentornato "+session['nickname']}}
+            </li>
+            <li>
+                <a href="/logout" class="btn btn-inverted">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <a href="/login" class="btn btn-inverted">login</a>
+            </li>
+            {% endif %}
+
+
+
         </ul>
     </div>
 </nav>
