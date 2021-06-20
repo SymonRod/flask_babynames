@@ -32,62 +32,39 @@ function nomiSort(a, b) {
 
 function getMiPiace(id) {
   if (id != "" && !isIn(list, id)) {
-    var request = new requestRequest();
+    var request = new XMLHttpRequest();
 
     request.onreadystatechange = function () {
       if (request.readyState == 4 && request.status == 200) {
-        var parser = new DOMParser();
-
         var reponse = request.responseText;
 
-        var finale;
+        result = JSON.parse(reponse);
 
-        xmlDoc = parser.parseFromString(reponse, "text/xml");
+        finale = "<p>";
 
-        var finale = "<p>";
-
-        var nomi = xmlDoc.getElementsByTagName("MiPiace");
+        console.log(result);
 
         var totale = 0;
 
-        for (var i = 0; i < nomi.length; i++) {
-          var nome = nomi[i];
-
-          if (nome.childNodes.length == 0) {
-            finale += "Non ci sono ancora valutazioni per questo nome! :/";
-          } else {
-            for (var j = 0; j < nome.childNodes.length; j++) {
-              valore = nome.childNodes[j].childNodes[0].nodeValue;
-
-              totale += parseInt(valore);
-            }
-
-            finale +=
-              "La media delle valutazioni è di: " +
-              totale / nome.childNodes.length +
-              "/5";
+        if (result.likes.length == 0) {
+          finale += "Non ci sono ancora valutazioni per questo nome! :/";
+        } else {
+          for (like of result.likes) {
+            totale += parseInt(like.value);
           }
-
-          list.push(id);
+          finale +=
+            "La media delle valutazioni è di: " +
+            totale / result.likes.length +
+            "/5";
         }
-
         finale += "</p>";
-
-        document.getElementById(id).innerHTML = decodeURIComponent(
-          escape(finale)
-        );
+        document.getElementById(id).innerHTML = finale;
       }
     };
 
     document.getElementById(id).innerHTML = "<p>In attesa dei dati...</p>";
 
-    request.open(
-      "GET",
-
-      "/api/nomi.php?idNome=" + id,
-
-      true
-    );
+    request.open("GET", "/api/getLikes?idNome=" + id, true);
 
     request.send();
   }
@@ -111,14 +88,14 @@ function aggiornaNomi() {
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         var reponse = xmlhttp.responseText;
-        
+
         nomi = JSON.parse(reponse);
 
         var arrayNomi = new Array();
 
-        finale = ""
+        finale = "";
 
-        nomi = nomi.nomi
+        nomi = nomi.nomi;
 
         if (nomi.length == 0) {
           finale +=
@@ -134,12 +111,11 @@ function aggiornaNomi() {
 
         for (i = 0; i < nomi.length; i++) {
           nome = nomi[i].nome;
-          valore = nome.value
-          lingua = nome.language
-          id = nome.id
+          valore = nome.value;
+          lingua = nome.language;
+          id = nome.id;
           valore = valore.charAt(0).toUpperCase() + valore.slice(1);
           arrayNomi.push(new Nome(valore, lingua, id));
-        
         }
 
         if (arrayNomi.length < 1500) {
@@ -172,10 +148,7 @@ function aggiornaNomi() {
     xmlhttp.open(
       "GET",
 
-      "/api/getNames?name=" +
-        str +
-        "&language=" +
-        lingue_sel,
+      "/api/getNames?name=" + str + "&language=" + lingue_sel,
 
       true
     );

@@ -22,15 +22,14 @@ def getLikes():
 
     likes = {'likes': []}
 
-    for instance in session.query().filter(MiPiace.valore, MiPiace.id_nome == id_nome).order_by(Nomi.id):
+    for instance in session.query(MiPiace.valore, MiPiace.id_nome).filter(MiPiace.id_nome == id_nome):
         likes['likes'].append({"value": instance.valore})
 
-    jsonify(likes)
+    return jsonify(likes)
 
 
 @app.route("/api/getNames")
 def getNames():
-
     try:
         search_name = request.args["name"]
         if search_name == "":

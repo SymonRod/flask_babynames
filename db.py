@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 
 from sqlalchemy.orm import sessionmaker
 
-
 Base = declarative_base()
 engine = create_engine('sqlite:///database/data.sqlite',
                        echo=True, connect_args={'check_same_thread': False})
@@ -23,7 +22,6 @@ class Nomi(Base):
 
 class MiPiace(Base):
     __tablename__ = 'MiPiace'
-
     id = Column(Integer, primary_key=True)
     id_utente = Column(Integer)
     id_nome = Column(Integer)
@@ -33,7 +31,6 @@ class MiPiace(Base):
 
 class Lingue(Base):
     __tablename__ = 'Lingue'
-
     id = Column(Integer, primary_key=True)
     lingua = Column(String)
     valore = Column(String)
@@ -41,7 +38,6 @@ class Lingue(Base):
 
 class Dettagli(Base):
     __tablename__ = 'Dettagli'
-
     id = Column(Integer, primary_key=True)
     name = Column(String)
     fullname = Column(String)
