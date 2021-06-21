@@ -1,9 +1,10 @@
 import random
 import string
+
+from flask.wrappers import Response
 from app_secret import secret
 from flask import Flask, render_template, request, jsonify, url_for, redirect
 from flask import session as flask_session
-from sqlalchemy.sql.functions import user
 from db import session, Nomi, MiPiace, UserTest
 from passlib.hash import pbkdf2_sha256
 
@@ -35,24 +36,27 @@ def getLikes():
     return jsonify(likes)
 
 
-@app.route("/login")
-def verifyUser():
-    try:
-        username = request.args["username"]
-        passwd = request.args["password"]
-    except Exception as e:
-        return "Error"
+@app.route("/login", methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        try:
+            username = request.form["username"]
+            passwd = request.form["password"]
+        except Exception as e:
+            return "Error"
 
-    for user in session.query(UserTest.nickname, UserTest.password, UserTest.salt).filter(UserTest.nickname == username):
-        passwd = pbkdf2_sha256.hash(
-            passwd, rounds=200000, salt=user.salt.encode())
+        for user in session.query(UserTest.nickname, UserTest.password, UserTest.salt).filter(UserTest.nickname == username):
+            passwd = pbkdf2_sha256.hash(
+                passwd, rounds=200000, salt=user.salt.encode())
 
-        if passwd == user.password:
-            flask_session['logged'] = True
-            flask_session['nickname'] = user.nickname
-            return redirect("/")
+            if passwd == user.password:
+                flask_session['logged'] = True
+                flask_session['nickname'] = user.nickname
+                return redirect("/")
 
-    return "Username o password incorretti!"
+        return Response(render_template("login.html"),401)
+    else:
+        return render_template("login.html")
 
 
 @app.route("/addUser")
